@@ -6,6 +6,9 @@ import {
   deleteUser,
   getAllProjects,
   updateProjectStatus,
+  createSolution,
+  updateSolution,
+  deleteSolution,
 } from "../controllers/adminController.js";
 
 const router = express.Router();
@@ -17,5 +20,10 @@ router.get("/users", getAllUsers);
 router.delete("/users/:id", deleteUser);
 router.get("/projects", getAllProjects);
 router.put("/projects/:id/status", updateProjectStatus);
+
+// Solutions CRUD
+router.post("/solutions", createSolution);
+router.put("/solutions/:id", updateSolution);
+router.delete("/solutions/:id", deleteSolution);
 
 export default router;

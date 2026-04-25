@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import Solution from "../models/Solution.js";
 import ProjectRequest from "../models/ProjectRequest.js";
 
 // GET /api/admin/stats
@@ -66,6 +67,43 @@ export const updateProjectStatus = async (req, res) => {
     project.status = status;
     const updated = await project.save();
     res.json(updated);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// POST /api/admin/solutions
+export const createSolution = async (req, res) => {
+  try {
+    const { title, description, price, category, image, demoLink } = req.body;
+    const solution = new Solution({ title, description, price, category, image, demoLink });
+    const created = await solution.save();
+    res.status(201).json(created);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// PUT /api/admin/solutions/:id
+export const updateSolution = async (req, res) => {
+  try {
+    const solution = await Solution.findById(req.params.id);
+    if (!solution) return res.status(404).json({ message: 'Solution not found' });
+    Object.assign(solution, req.body);
+    const updated = await solution.save();
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// DELETE /api/admin/solutions/:id
+export const deleteSolution = async (req, res) => {
+  try {
+    const solution = await Solution.findById(req.params.id);
+    if (!solution) return res.status(404).json({ message: 'Solution not found' });
+    await solution.deleteOne();
+    res.json({ message: 'Solution deleted' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
