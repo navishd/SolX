@@ -10,11 +10,9 @@ const seedAdmin = async () => {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB connected");
 
-    const existingAdmin = await User.findOne({ email: "admin@solx.com" });
-    if (existingAdmin) {
-      console.log("Admin already exists:", existingAdmin.email);
-      process.exit(0);
-    }
+    // Always delete and recreate to ensure password is in sync
+    await User.deleteOne({ email: "admin@solx.com" });
+    console.log("Cleared old admin (if any)");
 
     const hashedPassword = await bcrypt.hash("Admin@123", 10);
 
